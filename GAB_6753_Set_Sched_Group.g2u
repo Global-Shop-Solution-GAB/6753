@@ -1,0 +1,339 @@
+﻿Program.Sub.ScreenSU.Start
+Gui.FormSched..Create(BaseForm)
+Gui.FormSched..Caption("Sched. Group")
+Gui.FormSched..Size(278,131)
+Gui.FormSched..MinX(0)
+Gui.FormSched..MinY(0)
+Gui.FormSched..Position(0,0)
+Gui.FormSched..AlwaysOnTop(False)
+Gui.FormSched..FontName("Tahoma")
+Gui.FormSched..FontSize(8.25)
+Gui.FormSched..ControlBox(True)
+Gui.FormSched..MaxButton(True)
+Gui.FormSched..MinButton(True)
+Gui.FormSched..MousePointer(0)
+Gui.FormSched..Moveable(True)
+Gui.FormSched..Sizeable(False)
+Gui.FormSched..ShowInTaskBar(True)
+Gui.FormSched..TitleBar(True)
+Gui.FormSched..Event(UnLoad,FormSched_UnLoad)
+Gui.FormSched.lbl1.Create(Label,"Set Scheduling Group on Job?",True,142,13,0,54,12,True,0,"Tahoma",8.25,,0,0)
+Gui.FormSched.lbl1.BorderStyle(0)
+Gui.FormSched.txtSchedGroup.Create(TextBox,"",True,100,20,0,67,34,False,0,"Tahoma",8.25,,1)
+Gui.FormSched.cmdSchedGrpBrowser.Create(Button)
+Gui.FormSched.cmdSchedGrpBrowser.Enabled(True)
+Gui.FormSched.cmdSchedGrpBrowser.Visible(True)
+Gui.FormSched.cmdSchedGrpBrowser.Zorder(0)
+Gui.FormSched.cmdSchedGrpBrowser.Size(20,20)
+Gui.FormSched.cmdSchedGrpBrowser.Position(173,34)
+Gui.FormSched.cmdSchedGrpBrowser.Caption("BROWSE")
+Gui.FormSched.cmdSchedGrpBrowser.FontName("Tahoma")
+Gui.FormSched.cmdSchedGrpBrowser.FontSize(8.25)
+Gui.FormSched.cmdSchedGrpBrowser.Event(Click,cmdSchedGrpBrowser_Click)
+Gui.FormSched.cmdSetSchedGroup.Create(Button)
+Gui.FormSched.cmdSetSchedGroup.Enabled(True)
+Gui.FormSched.cmdSetSchedGroup.Visible(True)
+Gui.FormSched.cmdSetSchedGroup.Zorder(0)
+Gui.FormSched.cmdSetSchedGroup.Size(75,23)
+Gui.FormSched.cmdSetSchedGroup.Position(54,63)
+Gui.FormSched.cmdSetSchedGroup.Caption("SET")
+Gui.FormSched.cmdSetSchedGroup.FontName("Tahoma")
+Gui.FormSched.cmdSetSchedGroup.FontSize(8.25)
+Gui.FormSched.cmdSetSchedGroup.Event(Click,cmdSetSchedGroup_Click)
+Gui.FormSched.cmdCancel.Create(Button)
+Gui.FormSched.cmdCancel.Enabled(True)
+Gui.FormSched.cmdCancel.Visible(True)
+Gui.FormSched.cmdCancel.Zorder(0)
+Gui.FormSched.cmdCancel.Size(75,23)
+Gui.FormSched.cmdCancel.Position(138,63)
+Gui.FormSched.cmdCancel.Caption("CANCEL")
+Gui.FormSched.cmdCancel.FontName("Tahoma")
+Gui.FormSched.cmdCancel.FontSize(8.25)
+Gui.FormSched.cmdCancel.Event(Click,cmdCancel_Click)
+Gui.FormApprove..Create(BaseForm)
+Gui.FormApprove..Caption("Attention")
+Gui.FormApprove..Size(335,135)
+Gui.FormApprove..MinX(0)
+Gui.FormApprove..MinY(0)
+Gui.FormApprove..Position(0,0)
+Gui.FormApprove..AlwaysOnTop(True)
+Gui.FormApprove..FontName("Tahoma")
+Gui.FormApprove..FontSize(8.25)
+Gui.FormApprove..ControlBox(True)
+Gui.FormApprove..MaxButton(True)
+Gui.FormApprove..MinButton(True)
+Gui.FormApprove..MousePointer(0)
+Gui.FormApprove..Moveable(True)
+Gui.FormApprove..Sizeable(True)
+Gui.FormApprove..ShowInTaskBar(True)
+Gui.FormApprove..TitleBar(True)
+Gui.FormApprove.lbl1.Create(Label,"LBL1",True,22,13,0,21,15,True,0,"Tahoma",8.25,,0,0)
+Gui.FormApprove.lbl1.BorderStyle(0)
+Gui.FormApprove.cmdYes.Create(Button)
+Gui.FormApprove.cmdYes.Enabled(True)
+Gui.FormApprove.cmdYes.Visible(True)
+Gui.FormApprove.cmdYes.Zorder(0)
+Gui.FormApprove.cmdYes.Size(75,23)
+Gui.FormApprove.cmdYes.Position(83,50)
+Gui.FormApprove.cmdYes.Caption("YES")
+Gui.FormApprove.cmdYes.FontName("Tahoma")
+Gui.FormApprove.cmdYes.FontSize(8.25)
+Gui.FormApprove.cmdYes.Event(Click,cmdYes_Click)
+Gui.FormApprove.cmdNo.Create(Button)
+Gui.FormApprove.cmdNo.Enabled(True)
+Gui.FormApprove.cmdNo.Visible(True)
+Gui.FormApprove.cmdNo.Zorder(0)
+Gui.FormApprove.cmdNo.Size(75,23)
+Gui.FormApprove.cmdNo.Position(164,50)
+Gui.FormApprove.cmdNo.Caption("NO")
+Gui.FormApprove.cmdNo.FontName("Tahoma")
+Gui.FormApprove.cmdNo.FontSize(8.25)
+Gui.FormApprove.cmdNo.Event(Click,cmdNo_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+V.Global.sError.Declare(String)
+V.Global.sWO.Declare(String)
+V.Global.sSql.Declare(String)
+V.Global.sApprove.Declare(Long)
+V.Global.sApprove.Set(0)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'Developer: Angel Tudon
+'Customer: PTMW INC
+'Ticket: https://www.gss-service.com/Calls/CallEditInternalOpen/1365651/0
+'Quote: 14038 - 0
+'Project attaches to the create new work order hooks to allows users to set or update a scheduling group onto any given job and its suffixes.
+
+
+F.Intrinsic.Control.Try
+
+	Function.Intrinsic.UI.UsePixels ' Allows you to use Pixels instead of Twips throughout
+	V.Local.sNewCheck.Declare(String)
+	V.Local.sSql.Declare(String)
+
+	F.Intrinsic.Control.SelectCase(V.Caller.Hook)
+		
+		'New WO > BOM Post OK Hook
+		F.Intrinsic.Control.Case(17260)
+			'Set V.Passed.GLOBAL variable to its default state on the OK click hook for New WO > BOM screen to ensure the value is not set to a previously created job during the same thread
+			V.Passed.GLOBAL.Set("This variable will retain its value through out the thread")
+			V.Global.sWO.Set(V.Passed.000013)
+			GUI.FormSched..Show
+			GUI.FormSched..WaitForDismiss
+			F.Intrinsic.Control.End
+		
+		
+		F.Intrinsic.Control.Case(17261)
+			'Global variable is unchanged - end the program
+			F.Intrinsic.Control.If(V.Passed.GLOBAL, =, "This variable will retain its value through out the thread")
+				F.Intrinsic.Control.End
+			
+			'User selected to cancel or closed out of scheduling group selection, do nothing on all suffixes created
+			F.Intrinsic.Control.ElseIf(V.Passed.GLOBAL, =, "1")
+				F.Intrinsic.Control.End
+			
+			'A scheduling group selection was made, launch into sub to update scheduling group on job for each suffix
+			F.Intrinsic.Control.Else
+				F.Intrinsic.Control.CallSub(UpdateSchedGroup)
+				
+			F.Intrinsic.Control.EndIf
+		
+		'Capture job, suffix, and sched group if current job is a parent WO (suffix 000). Pass data to V.Passed.GLOBAL variable for use on post-save hook
+		F.Intrinsic.Control.Case(16650)
+			'V.Passed.000094 - Scheduling group
+			'V.Passed.000004 - suffix
+			'V.Passed.000003 - job
+
+			F.Intrinsic.Control.If(V.Passed.000004, =, "000")
+				'Capture current scheduling group on job
+				F.Intrinsic.String.Build("Select SCH_GRP from JOB_HEADER where JOB = '{0}' and SUFFIX = '{1}'", V.Passed.000003, V.Passed.000004, V.Local.sSql)
+				F.ODBC.Connection!con.OpenCompanyConnection
+				F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Passed.GLOBAL)
+				F.ODBC.Connection!con.Close
+				
+				F.Intrinsic.String.Build("{0}@!@{1}@!@{2}", V.Passed.GLOBAL, V.Passed.000003, V.Passed.000004, V.Passed.GLOBAL)
+				
+			F.Intrinsic.Control.EndIf
+		
+		'If GLOBAL variable does not contain its default value move to update scheduling group on all job children
+		F.Intrinsic.Control.Case(16651)
+			V.Local.sInfo.Declare(String)
+			F.Intrinsic.Control.If(V.Passed.GLOBAL, !=, "This variable will retain its value through out the thread")
+					F.Intrinsic.Control.CallSub(SchedGroupChange, "Data", V.Passed.GLOBAL)
+
+			F.Intrinsic.Control.EndIf
+			
+	F.Intrinsic.Control.EndSelect
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.CallSub(CatchError)
+F.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+Program.Sub.SchedGroupChange.Start
+F.Intrinsic.Control.Try
+
+	V.Local.sSql.Declare(String)
+	V.Local.sRet.Declare(String)
+	V.Local.sInfo.Declare(String)
+	V.Local.sMsgRet.Declare(String)
+	V.Local.sLabelMessage.Declare(String)
+	
+	F.Intrinsic.String.Split(V.Args.Data, "@!@", V.Local.sInfo)
+	
+	F.ODBC.Connection!con.OpenCompanyConnection
+	
+	'Loop until file lock on job has been released (should happen once they close the reschedule job screen)
+	V.Local.sRet.Set("1")
+	F.Intrinsic.Control.DoUntil(V.Local.sRet, =, "")
+		F.Intrinsic.String.Build("Select REC_KEY from X_LOCK_FILE where REC_KEY like '{0}%-{1}'", V.Local.sInfo(1), V.Local.sInfo(2), V.Local.sSql)
+		F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+	F.Intrinsic.Control.Loop
+	
+	'Check for change to the scheduling group
+	F.Intrinsic.String.Build("Select SCH_GRP from JOB_HEADER where JOB = '{0}' and SUFFIX = '{1}'", V.Local.sInfo(1), V.Local.sInfo(2), V.Local.sSql)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+	
+	F.Intrinsic.Control.If(V.Local.sRet.Trim, !=, V.Local.sInfo.Trim(0))
+		F.Intrinsic.UI.Sleep(1.5)
+		
+		'Ask user to approve update of all children job scheduling group (using form to be able to set always on top)
+		F.Intrinsic.String.Build("Sched. group for Job {0}-{1} was changed to {2}{3}Update on all children jobs?", V.Local.sInfo(1), V.Local.sInfo(2), V.Local.sRet.Trim, V.Ambient.NewLine, V.Local.sLabelMessage)
+		GUI.FormApprove.lbl1.Caption(V.Local.sLabelMessage)
+		GUI.FormApprove..Show
+		GUI.FormApprove..WaitForDismiss
+		
+		F.Intrinsic.Control.If(V.Global.sApprove, =, 0)
+			F.ODBC.Connection!con.Close
+			F.Intrinsic.Control.End
+			
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Build("Update JOB_HEADER set SCH_GRP = '{0}' where JOB = '{1}'", V.Local.sRet, V.Local.sInfo(1), V.Local.sSql)
+			F.ODBC.Connection!con.Execute(V.Local.sSql)
+			
+			'Return V.Passed.GLOBAL to its original state in case more jobs are updated without closing the screen
+			V.Passed.GLOBAL.Set("This variable will retain its value through out the thread")
+			F.Intrinsic.UI.Msgbox("Scheduling Group has been updated on all children jobs", "Update Sucessful")
+			
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+	
+	F.ODBC.Connection!con.Close
+	F.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.CallSub(CatchError)
+F.Intrinsic.Control.EndTry
+Program.Sub.SchedGroupChange.End
+
+Program.Sub.WOFromBOM.Start
+F.Intrinsic.Control.Try
+
+V.Local.sSql.Declare(String)
+V.Local.sSalesperson.Declare(String)
+V.Local.sRet.Declare(String)
+
+	'Ensure WO exists in JOB_HEADER
+	F.Intrinsic.String.Build("Select JOB from V_JOB_HEADER where JOB = '{0}'", V.Args.WO, V.Local.sSql)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+	'If WO exists, update salesperson on all suffixes
+	F.Intrinsic.Control.If(V.Ambient.ExecuteAndReturnEOF, !=, True)
+		F.Intrinsic.String.Build("Update JOB_HEADER set SALESPERSON = '{0}' where JOB = '{1}'", V.Local.sSalesperson, V.Args.WO, V.Local.sSql)
+		F.ODBC.Connection!con.Execute(V.Local.sSql)
+		
+	F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.CallSub(CatchError)
+F.Intrinsic.Control.EndTry
+Program.Sub.WOFromBOM.End
+
+Program.Sub.CatchError.Start
+'Display error info
+F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}", V.Ambient.ScriptPath, V.Ambient.Newline, V.Ambient.SubroutineCalledFrom, V.Ambient.ErrorNumber, V.Ambient.ErrorDescription, V.Ambient.GABVersion, V.Global.sError) 
+F.Intrinsic.UI.Msgbox(V.Global.sError)
+Program.Sub.CatchError.End
+
+Program.Sub.cmdSchedGrpBrowser_Click.Start
+F.Intrinsic.Control.Try
+
+	V.Local..BulkDeclareString(sRet,sWO,sTitles)
+	V.Local..BulkDeclareLong(iWidths)
+	F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+	F.Intrinsic.UI.SetBrowserColumnResizeMode(1)
+	
+	F.ODBC.Connection!con.OpenCompanyConnection
+	
+	F.Intrinsic.String.Split("ID*!*Description","*!*",V.Local.sTitles)
+	F.Intrinsic.String.Split("200*!*400","*!*",V.Local.iWidths)
+	'Launch browser
+	Function.Intrinsic.UI.Browser("Select Scheduling Group","con","select ID, DESCR from V_SCHED_GROUP",V.Local.sTitles,V.Local.iWidths,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		GUI.FormSched.txtSchedGroup.Text(V.Local.sRet(0))
+	F.Intrinsic.Control.EndIf
+	
+	F.ODBC.Connection!con.Close
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.CallSub(CatchError)
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdSchedGrpBrowser_Click.End
+
+Program.Sub.cmdSetSchedGroup_Click.Start
+F.Intrinsic.Control.Try
+	
+	V.Local.sSql.Declare(String)
+	
+	'Check for blank selection
+	F.Intrinsic.Control.If(V.Screen.FormSched!txtSchedGroup.Text, =, "")
+		F.Intrinsic.UI.Msgbox("Please select a scheduling group", "Warning")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.EndIf
+	
+	'Generate update scheduling group selected on all children jobs query
+	F.Intrinsic.String.Build("Update JOB_HEADER set SCH_GRP = '{0}' where JOB = '{1}'", V.Screen.FormSched!txtSchedGroup.Text, V.Global.sWO, V.Local.sSql)
+	
+	'Pass query to hook GLOBAL variable to reuse for each WO suffix created for current BOM
+	V.Passed.GLOBAL.Set(V.Local.sSql)
+	
+'	F.Intrinsic.Control.CallSub(UpdateSchedGroup)
+	F.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.Control.CallSub(CatchError)
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdSetSchedGroup_Click.End
+
+Program.Sub.UpdateSchedGroup.Start
+F.ODBC.Connection!con.OpenCompanyConnection
+F.ODBC.Connection!con.Execute(V.Passed.GLOBAL)
+F.ODBC.Connection!con.Close
+Program.Sub.UpdateSchedGroup.End
+
+Program.Sub.cmdCancel_Click.Start
+V.Passed.GLOBAL.Set("1")
+F.Intrinsic.Control.End
+Program.Sub.cmdCancel_Click.End
+
+Program.Sub.FormSched_UnLoad.Start
+V.Passed.GLOBAL.Set("1")
+F.Intrinsic.Control.End
+Program.Sub.FormSched_UnLoad.End
+
+Program.Sub.cmdYes_Click.Start
+V.Global.sApprove.Set(1)
+GUI.FormApprove..Visible(False)
+Program.Sub.cmdYes_Click.End
+
+Program.Sub.cmdNo_Click.Start
+V.Global.sApprove.Set(0)
+GUI.FormApprove..Visible(False)
+Program.Sub.cmdNo_Click.End
+
+Program.Sub.Comments.Start
+${$5$}$20.1.8286.22461$}$1
+${$6$}$Angel$}$20230720154452054$}$KXl0r/FkrMYwb/r4ukQ87VNzvoHa8Zo7+ft+U04gu0yPV6kZ104tgUGlEcT0ZIz+ZffG17Wj3sE=
+Program.Sub.Comments.End
